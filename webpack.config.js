@@ -1,7 +1,15 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/index.ts',
+    mode: 'production',
+    entry: './src/main.ts',
+    output: {
+        filename: 'bundle.js',
+        path: path.join(__dirname, 'dist')
+    },
+    externals: {
+        // lodash: '_'
+    },
     devtool: 'inline-source-map',
     module: {
         rules: [
@@ -13,14 +21,15 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js'],
+        modules: [path.resolve(process.env.APPDATA, 'npm/node_modules')]
     },
-    output: {
-        filename: 'bundle.js',
-        path: path.join(__dirname, 'build')
+    resolveLoader: {
+        modules: [path.resolve(process.env.APPDATA, 'npm/node_modules')]
     },
     devServer: {
-        contentBase: './',
+        contentBase: path.resolve(__dirname, 'dist'),
+        compress: true,
         port: 3000
     }
 };
